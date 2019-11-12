@@ -4,15 +4,14 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:urbanheight/buildingmanagement/building.dart';
 import 'package:urbanheight/service/api.dart';
 
 class SubMenu extends StatefulWidget {
-
   static String tag = 'submenu';
-  
+
   @override
   _SubMenuState createState() => new _SubMenuState();
-
 }
 
 class _SubMenuState extends State<SubMenu> {
@@ -22,20 +21,13 @@ class _SubMenuState extends State<SubMenu> {
   Future<String> makeRequest() async {
     prefs = await SharedPreferences.getInstance();
 
-    String url = Api.serviceApi + '/api/submenu/'+ prefs.getInt("menuId").toString();
+    String url =
+        Api.serviceApi + '/api/submenu/' + prefs.getInt("menuId").toString();
 
     var response = await http.get(Uri.encodeFull(url),
         headers: {'authorization': prefs.getString("token")});
 
     setState(() {
-      Fluttertoast.showToast(
-          msg: prefs.getInt('menuId').toString(),
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.red,
-          textColor: Colors.white,
-          fontSize: 20.0);
       var extractdata = jsonDecode(response.body);
       data = extractdata['result'];
     });
@@ -73,39 +65,77 @@ class _SubMenuState extends State<SubMenu> {
         ),
         body: Column(
           children: <Widget>[
+             Flexible(
+                        flex: 1,
+                        child: Container(
+                          margin: const EdgeInsets.only(top: 13.0),
+                          height: 30.0,
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              "   Pilih Kategori",
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  color: Colors.black,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                        ),
+                      ),
             Flexible(
                 flex: 2,
                 child: Center(
                   child: Container(
                     alignment: Alignment.center,
                     child: GridView.builder(
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 4),
-                        itemCount: data == null ? 0 : data.length,
-                        itemBuilder: (BuildContext context, i) {
-                          return Container(
-                              padding: EdgeInsets.all(5.0),
-                              child: new GestureDetector(
-                                
-                                child: Center(
-                                  child: GridTile(
-                                    footer: Text(
-                                      data[i]["nameSubMenu"],
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 7),
-                                    ),
-                                    child: Icon(Icons.access_alarm,
-                                        size: 40.0, color: Colors.red),
-                                  ),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          crossAxisCount: 3),
+                      itemCount: data == null ? 0 : data.length,
+                      itemBuilder: (BuildContext context, i) {
+                        //if (index < 50)
+                        return Container(
+                           decoration: new BoxDecoration(
+                color: Colors.blue[50],
+                borderRadius: new BorderRadius.only(
+                    topLeft: const Radius.circular(8.0),
+                    topRight: const Radius.circular(8.0),
+                    bottomLeft: const Radius.circular(8.0),
+                    bottomRight: const Radius.circular(8.0))),
+                          padding: EdgeInsets.all(20.0),
+                          child: new GestureDetector(
+                            onTap: () => _onTileClicked(data[i]["id"]),
+                            child: Center(
+                              child: GridTile(
+                                footer: Text(
+                                  data[i]["nameSubMenu"],
+                                  textAlign: TextAlign.center, style: TextStyle(fontSize: 8, fontWeight: FontWeight.bold),
                                 ),
-                              ));
-                        }),
-                    color: Colors.white,
+                                header: Text(
+                                  '',
+                                  textAlign: TextAlign.center,
+                                ),
+                                child: Icon(Icons.access_alarm,
+                                    size: 40.0, color: Colors.red),
+                              ),
+                            ),
+                          ),
+                          //color: Colors.indigo[50],
+                          margin: EdgeInsets.all(1.0),
+                        );
+                      },
+                    ),
+                    //color: Colors.lightBlue[50],
                   ),
                 )),
           ],
         ));
+  }
+
+  _onTileClicked(int id) {
+    prefs.setInt('subId', id);
+    Navigator.of(context).push(new MaterialPageRoute(
+      builder: (BuildContext context) => new Building(),
+    ));
   }
 }

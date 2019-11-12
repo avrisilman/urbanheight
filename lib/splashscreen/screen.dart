@@ -39,17 +39,22 @@ class _ScreenState extends State<Screen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.red,
+      backgroundColor: Colors.white,
       body: Container(
         child: Center(
           child: Column(
             // center the children
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "SPLAS SCREEN",
-                style: TextStyle(color: Colors.white),
-              )
+              CircleAvatar(
+          backgroundColor: Colors.transparent,
+          radius: 80.0,
+          child: Image.network(
+            'https://www.meobserver.org/wp-content/uploads/2017/05/Apple-Logo-Transparent-PNG.png',
+            height: 150.0,
+            width: 150.0,
+          )),
+              
             ],
           ),
         ),

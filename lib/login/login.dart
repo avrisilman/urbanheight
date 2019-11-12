@@ -4,6 +4,7 @@ import 'package:urbanheight/login/code.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:urbanheight/service/api.dart';
+import 'package:urbanheight/programmatically/beauty_textfield.dart';
 
 class Login extends StatefulWidget {
   static String tag = 'login';
@@ -12,12 +13,15 @@ class Login extends StatefulWidget {
 }
 
 class _LoginPageState extends State<Login> {
-  TextEditingController controllerEmail = new TextEditingController();
+
+  String email = '';
+  void printText(String text) async {
+    email = text;
+  }
 
   void postLogin() async {
-    var url = Api.serviceApi +'/signin';
-    final response =
-        await http.post(url, body: {"email": controllerEmail.text});
+    var url = Api.serviceApi + '/signin';
+    final response = await http.post(url, body: {"email": email});
     final data = jsonDecode(response.body);
     final message = data['message'];
 
@@ -25,11 +29,11 @@ class _LoginPageState extends State<Login> {
       Navigator.of(context).pushNamed(Code.tag);
     } else {
       Fluttertoast.showToast(
-          msg: "Mohon Maaf Email Tidak Terdaftar...!!!",
+          msg: "Email Tidak Terdaftar.",
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIos: 1,
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.blue,
           textColor: Colors.white,
           fontSize: 20.0);
     }
@@ -43,27 +47,44 @@ class _LoginPageState extends State<Login> {
           backgroundColor: Colors.transparent,
           radius: 80.0,
           child: Image.network(
-            'https://www.freelogodesign.org/Content/img/logo-samples/cafeespresso.png',
+            'https://www.meobserver.org/wp-content/uploads/2017/05/Apple-Logo-Transparent-PNG.png',
             height: 150.0,
             width: 150.0,
           )),
     );
 
-    final email = TextField(
-        controller: controllerEmail,
-        decoration: InputDecoration(
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: Colors.blueAccent,
-              ),
-              borderRadius: BorderRadius.circular(10.0),
-            ),
-            hintText: "Masukan Email",
-            labelText: "Email",
-            prefixIcon: Icon(
-              Icons.email,
-              color: Colors.blue,
-            )));
+    final lbl = Text(
+      "   Login",
+      style: TextStyle(
+        color: Colors.blue,
+        fontWeight: FontWeight.bold,
+        fontSize: 20.0,
+      ),
+    );
+
+    final email = BeautyTextfield(
+      width: double.maxFinite,
+      height: 60,
+      accentColor: Colors.blue[100], // On Focus Color
+      textColor: Colors.black,
+      //duration: Duration(milliseconds: 500),
+      inputType: TextInputType.text,
+      backgroundColor: Colors.blue,
+      prefixIcon: Icon(
+        Icons.email,
+        color: Colors.white,
+      ),
+      placeholder: "Email",
+      onTap: () {
+        print('Click');
+      },
+      onChanged: (text) {
+        printText(text);
+      },
+      onSubmitted: (data) {
+        print(data.length);
+      },
+    );
 
     final loginButton = Padding(
       padding: EdgeInsets.symmetric(vertical: 16.0),
@@ -74,8 +95,12 @@ class _LoginPageState extends State<Login> {
         onPressed: () {
           postLogin();
         },
-        color: Colors.blue,
-        child: Text('Log In', style: TextStyle(color: Colors.white)),
+        color: Colors.white,
+        child: Text('Log In',
+            style: TextStyle(
+                color: Colors.blue,
+                fontWeight: FontWeight.bold,
+                fontSize: 16.0)),
       ),
     );
 
@@ -87,6 +112,7 @@ class _LoginPageState extends State<Login> {
           padding: EdgeInsets.only(left: 4.0, right: 5.0),
           children: <Widget>[
             logo,
+            lbl,
             email,
             loginButton,
           ],

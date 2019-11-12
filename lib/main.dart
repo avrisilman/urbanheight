@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbanheight/buildingmanagement/building.dart';
 import 'package:urbanheight/login/login.dart';
 import 'package:urbanheight/login/code.dart';
 import 'package:urbanheight/submenu/submenu.dart';
@@ -14,6 +15,7 @@ class MyApp extends StatelessWidget {
     Code.tag: (context) => Code(),
     MainHome.tag: (context) => MainHome(),
     SubMenu.tag: (context) => SubMenu(),
+    Building.tag: (context) => Building(),
   };
 
   @override

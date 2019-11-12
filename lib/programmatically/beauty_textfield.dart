@@ -142,7 +142,7 @@ class _BeautyTextfieldState extends State<BeautyTextfield> {
                         fontWeight: widget.fontWeight,
                         wordSpacing: widget.wordSpacing,
                         textBaseline: widget.textBaseline,
-                        fontSize: 18,
+                        fontSize: 12,
                         letterSpacing: 2,
                         color: widget.textColor,
                       ),

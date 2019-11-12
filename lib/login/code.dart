@@ -19,6 +19,7 @@ class _CodePageState extends State<Code> {
     final response = await http.post(url, body: {"code": passcode});
     final data = jsonDecode(response.body);
 
+    final usersId = data['result']['id'];
     final noIdentity = data['result']['noIdentity'];
     final fullName = data['result']['fullName'];
     final handphone = data['result']['handphone'];
@@ -30,6 +31,7 @@ class _CodePageState extends State<Code> {
 
     SharedPreferences prefs = await SharedPreferences.getInstance();
     setState(() {
+      prefs.setInt("usersId", usersId);
       prefs.setString("noIdentity", noIdentity);
       prefs.setString("fullName", fullName);
       prefs.setString("handphone", handphone);
