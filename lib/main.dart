@@ -11,7 +11,7 @@ void main() => runApp(MyApp());
 class MyApp extends StatelessWidget {
   final routes = <String, WidgetBuilder>{
     Screen.tag: (context) => Screen(),
-    Login.tag: (context) => Login(),
+    Signin.tag: (context) => Signin(),
     Code.tag: (context) => Code(),
     MainHome.tag: (context) => MainHome(),
     SubMenu.tag: (context) => SubMenu(),
@@ -28,7 +28,7 @@ class MyApp extends StatelessWidget {
         fontFamily: 'Nunito',
       ),
       home: Screen(),
-      //home: Login(),
+      //home: Signin(),
       //home: Code(),
       //home: MainHome(),
       // home: SubMenu(),

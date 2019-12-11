@@ -2,10 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:urbanheight/buildingmanagement/building_detail.dart';
 import 'package:urbanheight/service/api.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class Building extends StatefulWidget {
   static String tag = 'building';
@@ -90,7 +89,7 @@ class _BuildingState extends State<Building> {
                 padding: const EdgeInsets.all(10.0),
                 child: new GestureDetector(
                   onTap: () => _onTileClicked(
-                      data[i]["id"],
+                    //  data[i]["id"],
                       data[i]["standMeter"],
                       data[i]["periode"],
                       data[i]["amount"],
@@ -114,16 +113,191 @@ class _BuildingState extends State<Building> {
         ));
   }
 
-  _onTileClicked(id, standMeter, periode, amount, status, date, time) {
-      prefs.setInt('buildingId', id);
-      prefs.setString('standMeter', standMeter);
-      prefs.setString('periode', periode);
-      prefs.setString('amount', amount);
-      prefs.setString('status_air_listrik', status);
-      prefs.setString('date', date);
-      prefs.setString('time', time);
-      Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) => new BuildingDetail(),
-      ));
+  _onTileClicked(String standMeter, String periode, String amount, String status, String date, String time) {
+
+     final content = Card(
+      child: Container(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 120.0,
+                    child: Text(
+                      "Nama",
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                  Container(
+                    child: Text(":"),
+                  ),
+                  Expanded(
+                    child: Text(
+                      prefs.getString("fullName"),
+                      maxLines: 20,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: Colors.black26,
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 120.0,
+                    child: Text(
+                      "Unit",
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                  Container(
+                    child: Text(":"),
+                  ),
+                  Expanded(
+                    child: Text(
+                      prefs.getString("unit"),
+                      maxLines: 20,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: Colors.black26,
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 120.0,
+                    child: Text(
+                      "Stand Meter",
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                  Container(
+                    child: Text(":"),
+                  ),
+                  Expanded(
+                    child: Text(
+                      standMeter,
+                      maxLines: 20,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: Colors.black26,
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 120.0,
+                    child: Text(
+                      "Periode",
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                  Container(
+                    child: Text(":"),
+                  ),
+                  Expanded(
+                    child: Text(
+                      periode,
+                      maxLines: 20,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: Colors.black26,
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 120.0,
+                    child: Text(
+                      "Total",
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                  Container(
+                    child: Text(":"),
+                  ),
+                  Expanded(
+                    child: Text(
+                      amount,
+                      maxLines: 20,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: Colors.black26,
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Container(
+                    width: 120.0,
+                    child: Text(
+                      "Status",
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                  Container(
+                    child: Text(":"),
+                  ),
+                  Expanded(
+                    child: Text(
+                      status,
+                      maxLines: 20,
+                      overflow: TextOverflow.ellipsis,
+                      style: TextStyle(fontSize: 8),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Divider(
+              color: Colors.black26,
+            ),
+          ],
+        ),
+      ),
+    );
+
+    Alert(
+        context: context,
+        title: "AIR",
+        content: Align(
+          alignment: Alignment.topCenter,
+          child: ListView(
+            shrinkWrap: true,
+            //padding: EdgeInsets.only(left: 4.0, right: 5.0, top: 5.0),
+            children: <Widget>[content],
+          ),
+        )).show();
+
   }
 }

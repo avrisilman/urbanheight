@@ -96,7 +96,7 @@ class _SubMenuState extends State<SubMenu> {
                         //if (index < 50)
                         return Container(
                            decoration: new BoxDecoration(
-                color: Colors.blue[50],
+                color: Colors.white,
                 borderRadius: new BorderRadius.only(
                     topLeft: const Radius.circular(8.0),
                     topRight: const Radius.circular(8.0),
@@ -134,8 +134,15 @@ class _SubMenuState extends State<SubMenu> {
 
   _onTileClicked(int id) {
     prefs.setInt('subId', id);
-    Navigator.of(context).push(new MaterialPageRoute(
-      builder: (BuildContext context) => new Building(),
-    ));
+    if (id == 34) {
+       Navigator.of(context).push(new MaterialPageRoute(
+         // builder: (BuildContext context) => new Camera(),
+      ));
+    } else {
+         Navigator.of(context).push(new MaterialPageRoute(
+          builder: (BuildContext context) => new Building(),
+        ));
+    }
+   
   }
 }

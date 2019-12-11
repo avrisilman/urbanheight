@@ -25,7 +25,7 @@ class _ScreenState extends State<Screen> {
         ));
       } else {
         Navigator.of(context).push(new MaterialPageRoute(
-          builder: (BuildContext context) => new Login(),
+          builder: (BuildContext context) => new Signin(),
         ));
       }
     });
@@ -50,7 +50,7 @@ class _ScreenState extends State<Screen> {
           backgroundColor: Colors.transparent,
           radius: 80.0,
           child: Image.network(
-            'https://www.meobserver.org/wp-content/uploads/2017/05/Apple-Logo-Transparent-PNG.png',
+            'https://urbanheight.000webhostapp.com/logo_uhr.png',
             height: 150.0,
             width: 150.0,
           )),

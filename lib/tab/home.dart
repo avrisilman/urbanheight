@@ -3,9 +3,13 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:urbanheight/event/event.dart';
+import 'package:urbanheight/login/login.dart';
 import 'package:urbanheight/service/api.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:urbanheight/submenu/submenu.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,7 +22,7 @@ class _HomeState extends State<Home> {
 
   String nama = '';
 
-  Future<String> makeRequest() async {
+  Future<String> makeRequests() async {
     prefs = await SharedPreferences.getInstance();
 
     String url =
@@ -34,9 +38,18 @@ class _HomeState extends State<Home> {
     });
   }
 
+  void postPanic() async {
+     const url = "tel:+628777543322";   
+    if (await canLaunch(url)) {
+       await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }   
+  }
+
   @override
   void initState() {
-    this.makeRequest();
+    this.makeRequests();
   }
 
   @override
@@ -82,13 +95,23 @@ class _HomeState extends State<Home> {
                                   fontWeight: FontWeight.bold),
                             ),
                           ),
-                          Container(
-                            margin: const EdgeInsets.all(5.0),
-                            width: 45.0,
-                            height: 45.0,
-                            child: Icon(
-                              Icons.power_settings_new,
-                              color: Colors.white,
+                          GestureDetector(
+                            onTap: (){
+                              setState(() {
+                                 prefs.clear();
+                                  Navigator.of(context).push(new MaterialPageRoute(
+                                      builder: (BuildContext context) => new Signin(),
+                                  ));
+                              });
+                            },
+                            child: Container(
+                              margin: const EdgeInsets.all(5.0),
+                              width: 45.0,
+                              height: 45.0,
+                              child: Icon(
+                                Icons.power_settings_new,
+                                color: Colors.white,
+                              ),
                             ),
                           )
                         ],
@@ -196,8 +219,55 @@ class _HomeState extends State<Home> {
 
   _onTileClicked(int id) {
     prefs.setInt('menuId', id);
-    Navigator.of(context).push(new MaterialPageRoute(
-      builder: (BuildContext context) => new SubMenu(),
-    ));
+    Fluttertoast.showToast(
+        msg: id.toString(),
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIos: 1,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+    if (id == 6) {
+      Navigator.of(context).push(new MaterialPageRoute(
+        builder: (BuildContext context) => new Event(),
+      ));
+    } else if(id == 1){
+       Alert(
+      context: context,
+      type: AlertType.warning,
+      title: "PANIC BUTTON",
+      desc:
+          "Fitur ini hanya untuk dilingkungan Apartement Urban Height Residence tidak berlaku di luar lingkungan Apartement, dan hanya dalam kondisi bahaya.",
+      buttons: [
+        DialogButton(
+          child: Text(
+            "CANCEL",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () => Navigator.pop(context),
+          color: Color.fromRGBO(0, 179, 134, 1.0),
+        ),
+        DialogButton(
+          child: Text(
+            "CALL",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+          onPressed: () {
+            postPanic();
+          },
+          gradient: LinearGradient(colors: [
+            Color.fromRGBO(116, 116, 191, 1.0),
+            Color.fromRGBO(52, 138, 199, 1.0)
+          ]),
+        )
+      ],
+    ).show();
+    }else {
+      Navigator.of(context).push(new MaterialPageRoute(
+        builder: (BuildContext context) => new SubMenu(),
+      ));
+    }
+   
   }
 }

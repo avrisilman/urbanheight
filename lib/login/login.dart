@@ -4,120 +4,148 @@ import 'package:urbanheight/login/code.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:urbanheight/service/api.dart';
-import 'package:urbanheight/programmatically/beauty_textfield.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
-class Login extends StatefulWidget {
-  static String tag = 'login';
+class Signin extends StatefulWidget {
+   static String tag = 'signin';
   @override
-  _LoginPageState createState() => new _LoginPageState();
+  _SigninPageState createState() => new _SigninPageState();
 }
 
-class _LoginPageState extends State<Login> {
+class _SigninPageState extends State<Signin> {
+  TextEditingController emailController = new TextEditingController();
 
-  String email = '';
-  void printText(String text) async {
-    email = text;
-  }
+  var progBar = 1;
 
-  void postLogin() async {
+  void signin() async {
     var url = Api.serviceApi + '/signin';
-    final response = await http.post(url, body: {"email": email});
+    final response = await http.post(url, body: {"email": emailController.text});
     final data = jsonDecode(response.body);
     final message = data['message'];
 
-    if (message == 'success') {
-      Navigator.of(context).pushNamed(Code.tag);
+    setState(() {
+      if (message == 'success') {
+       progBar = 1;
+       Navigator.of(context).push(new MaterialPageRoute(
+          builder: (BuildContext context) => new Code(),
+        ));
     } else {
-      Fluttertoast.showToast(
-          msg: "Email Tidak Terdaftar.",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.CENTER,
-          timeInSecForIos: 1,
-          backgroundColor: Colors.blue,
-          textColor: Colors.white,
-          fontSize: 20.0);
+      progBar = 1;
+        _onAlertButtonsPressed(context);
     }
+    });
+
   }
 
   @override
   Widget build(BuildContext context) {
-    final logo = Hero(
-      tag: 'hero',
-      child: CircleAvatar(
-          backgroundColor: Colors.transparent,
-          radius: 80.0,
-          child: Image.network(
-            'https://www.meobserver.org/wp-content/uploads/2017/05/Apple-Logo-Transparent-PNG.png',
-            height: 150.0,
-            width: 150.0,
-          )),
+    TextStyle style = TextStyle(
+      fontFamily: 'Montserrat',
+      fontSize: 14.0,
+      color: Colors.blue,
     );
 
-    final lbl = Text(
-      "   Login",
+    LinearProgressIndicator psBar;
+
+    if (progBar == 2) {
+      psBar = LinearProgressIndicator(backgroundColor: Colors.blue);
+    } else if (progBar == 1) {
+      psBar = null;
+    }
+
+    final lbl = Align(
+        alignment: Alignment.centerLeft,
+        child: Container(
+          padding: EdgeInsets.only(left: 15.0),
+          child: Text(
+            "LOGIN",
+            style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 28.0,
+                color: Colors.blue),
+          ),
+        ));
+
+    final imgUrl = CircleAvatar(
+        backgroundColor: Colors.transparent,
+        radius: 80.0,
+        child: Image.network(
+          'https://urbanheight.000webhostapp.com/logo_uhr.png',
+          height: 150.0,
+          width: 150.0,
+        ));
+
+    final txt = Text(
+      "Urban Height",
       style: TextStyle(
         color: Colors.blue,
         fontWeight: FontWeight.bold,
         fontSize: 20.0,
       ),
+      textAlign: TextAlign.center,
     );
 
-    final email = BeautyTextfield(
-      width: double.maxFinite,
-      height: 60,
-      accentColor: Colors.blue[100], // On Focus Color
-      textColor: Colors.black,
-      //duration: Duration(milliseconds: 500),
-      inputType: TextInputType.text,
-      backgroundColor: Colors.blue,
-      prefixIcon: Icon(
-        Icons.email,
-        color: Colors.white,
-      ),
-      placeholder: "Email",
-      onTap: () {
-        print('Click');
-      },
-      onChanged: (text) {
-        printText(text);
-      },
-      onSubmitted: (data) {
-        print(data.length);
-      },
-    );
+    final email = Padding(
+        padding: EdgeInsets.all(8.0),
+        child: TextField(
+          controller: emailController,
+          obscureText: false,
+          style: style,
+          decoration: InputDecoration(
+              prefixIcon: Icon(
+                Icons.email,
+                color: Colors.blue,
+              ),
+              contentPadding: EdgeInsets.fromLTRB(15.0, 10.0, 15.0, 10.0),
+              hintText: "Email",
+              border: OutlineInputBorder(
+                  borderSide: new BorderSide(color: Colors.blue),
+                  borderRadius: BorderRadius.circular(32.0))),
+        ));
 
-    final loginButton = Padding(
-      padding: EdgeInsets.symmetric(vertical: 16.0),
+    final signinButton = Padding(
+      padding: EdgeInsets.all(8.0),
       child: RaisedButton(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
         onPressed: () {
-          postLogin();
+          setState(() {
+            progBar = 2;
+          });
+          signin();
         },
-        color: Colors.white,
-        child: Text('Log In',
+        color: Colors.blue,
+        child: Text('LOGIN',
             style: TextStyle(
-                color: Colors.blue,
+                color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 16.0)),
       ),
     );
 
+
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Center(
-        child: ListView(
-          shrinkWrap: true,
-          padding: EdgeInsets.only(left: 4.0, right: 5.0),
-          children: <Widget>[
-            logo,
-            lbl,
-            email,
-            loginButton,
-          ],
-        ),
-      ),
-    );
+        bottomSheet: psBar,
+        backgroundColor: Colors.white,
+        body: Align(
+          alignment: Alignment.topCenter,
+          child: ListView(
+            shrinkWrap: true,
+            padding: EdgeInsets.only(left: 4.0, right: 5.0, top: 40.0),
+            children: <Widget>[lbl, imgUrl, txt, email, signinButton],
+          ),
+        ));
   }
+
+  _onClickReg() {
+    Navigator.of(context).push(new MaterialPageRoute(
+      //builder: (BuildContext context) => new Signup(),
+    ));
+  }
+
+   void _onAlertButtonsPressed(BuildContext context) {
+      Alert(context: context, title: "INVALID EMAIL", desc: "Harap Masukan Email dengan benar atau Hubungi Building Management").show();
+  }
+
 }
