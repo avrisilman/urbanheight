@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:urbanheight/buildingmanagement/building.dart';
+import 'package:urbanheight/buildingmanagement/front_cam.dart';
 import 'package:urbanheight/service/api.dart';
 
 class SubMenu extends StatefulWidget {
@@ -136,7 +137,7 @@ class _SubMenuState extends State<SubMenu> {
     prefs.setInt('subId', id);
     if (id == 34) {
        Navigator.of(context).push(new MaterialPageRoute(
-         // builder: (BuildContext context) => new Camera(),
+          builder: (BuildContext context) => new MyHomePage(),
       ));
     } else {
          Navigator.of(context).push(new MaterialPageRoute(
