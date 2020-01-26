@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:urbanheight/tab/profile.dart';
-import 'package:urbanheight/tab/setting.dart';
 import 'package:urbanheight/tab/home.dart';
+import 'package:urbanheight/tab/settings.dart';
 
 class MainHome extends StatefulWidget {
   static String tag = 'mainhome';
@@ -13,7 +13,7 @@ class MainHome extends StatefulWidget {
 
 class _MainHomeState extends State<MainHome> {
   int _currentIndex = 0;
-  final List<Widget> _children = [Home(), Profile(), Setting()];
+  final List<Widget> _children = [Home(), Setting(), Profile()];
 
   @override
   Widget build(BuildContext context) {
@@ -28,11 +28,12 @@ class _MainHomeState extends State<MainHome> {
             title: Text('Home'),
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.mail),
-            title: Text('Messages'),
+            icon: Icon(Icons.history),
+            title: Text('Histori'),
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.person), title: Text('Profile'))
+              icon: Icon(Icons.person), 
+              title: Text('Profile'))
         ],
       ),
     );

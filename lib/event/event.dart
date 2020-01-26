@@ -23,7 +23,7 @@ class _EventState extends State<Event> {
   Future<String> makeRequest() async {
     prefs = await SharedPreferences.getInstance();
 
-    String url = Api.serviceApi + '/api/event/4';
+    String url = Api.serviceApi + '/api/event/1';
 
     var response = await http.get(Uri.encodeFull(url),
         headers: {'authorization': prefs.getString("token")});
@@ -54,7 +54,7 @@ class _EventState extends State<Event> {
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: <Widget>[
             Text(
-              "Event",
+              "",
               style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 16.0,
@@ -166,7 +166,7 @@ class _EventState extends State<Event> {
             onPressed: () => Navigator.of(context).pop(),
           ),
           title: new Text(
-            'Event',
+            'Reservasi',
             style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
           ),
           centerTitle: true,

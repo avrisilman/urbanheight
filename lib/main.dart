@@ -5,6 +5,7 @@ import 'package:urbanheight/login/code.dart';
 import 'package:urbanheight/submenu/submenu.dart';
 import 'package:urbanheight/tab/mainhome.dart';
 import 'package:urbanheight/splashscreen/screen.dart';
+import 'package:flutter/services.dart' ;
 
 void main() => runApp(MyApp());
 
@@ -20,6 +21,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+      ]);
     return MaterialApp(
       title: 'Kodeversitas',
       debugShowCheckedModeBanner: false,

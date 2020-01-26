@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:urbanheight/event/event.dart';
+import 'package:urbanheight/info/info.dart';
 import 'package:urbanheight/login/login.dart';
+import 'package:urbanheight/numpang/numpang.dart';
 import 'package:urbanheight/service/api.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:urbanheight/submenu/submenu.dart';
@@ -197,8 +199,14 @@ class _HomeState extends State<Home> {
                                               fontWeight: FontWeight.bold,
                                               fontSize: 8),
                                         ),
-                                        child: Icon(Icons.access_alarm,
-                                            size: 30.0, color: Colors.blue),
+                                         child: CircleAvatar(
+                                            backgroundColor: Colors.transparent,
+                                            radius: 80.0,
+                                            child: Image.network(
+                                              data[i]["urlImage"],
+                                              height: 30.0,
+                                              width: 30.0,
+                                            )),
                                       ),
                                     ),
                                   ));
@@ -228,6 +236,19 @@ class _HomeState extends State<Home> {
         textColor: Colors.white,
         fontSize: 16.0
     );
+
+    if(id == 3){
+        prefs.setString("title", "INFO");
+    }else if(id == 2){
+        prefs.setString("title", "JUAL BELI");
+    }else if(id == 4){
+        prefs.setString("title", "PINJAM ALAT");
+    }else if(id == 5){
+        prefs.setString("title", "HOBI");
+    }else if(id == 8){
+        prefs.setString("title", "BUILDING MANAGEMENT");
+    }
+
     if (id == 6) {
       Navigator.of(context).push(new MaterialPageRoute(
         builder: (BuildContext context) => new Event(),
@@ -263,7 +284,16 @@ class _HomeState extends State<Home> {
         )
       ],
     ).show();
-    }else {
+    }else if(id == 7){
+       Navigator.of(context).push(new MaterialPageRoute(
+        builder: (BuildContext context) => new Numpang(),
+      ));
+    }else if(id == 3){
+        Navigator.of(context).push(new MaterialPageRoute(
+          builder: (BuildContext context) => new Info(),
+        ));
+    }
+    else {
       Navigator.of(context).push(new MaterialPageRoute(
         builder: (BuildContext context) => new SubMenu(),
       ));
